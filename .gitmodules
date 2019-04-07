@@ -1,0 +1,6 @@
+[submodule "dragonfly"]
+	path = dragonfly
+	url = https://github.com/project8/dragonfly.git
+[submodule "dripline-python"]
+	path = dripline-python
+	url = https://github.com/project8/dripline-python.git

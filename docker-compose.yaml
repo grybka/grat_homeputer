@@ -12,7 +12,19 @@ services:
       - type: bind
         source: "./local_dragonfly/home_authentications.json"
         target: "/root/.project8_authentications.json"
+      - ./local_dragonfly/custom_homeputer_dragonfly:/custom_homeputer_dragonfly
     command: ["dragonfly", "monitor", "-vv", "-b", "rabbit_broker", "-e", "alerts"]
-    deponds_on:
+    depends_on:
       - rabbit_broker
+  pm25:
+    build: local_dragonfly/ 
+    volumes:
+      - type: bind
+        source: "./local_dragonfly/home_authentications.json"
+        target: "/root/.project8_authentications.json"
+      - /custom_homeputer_dragonfly:./local_dragonfly/custom_homeputer_dragonfly
+    command: ["dragonfly", "serve", "-c", "/custom_homputer_dragonfly/pm25.yaml","-b", "rabbit_broker"]
+    depends_on:
+      - rabbit_broker
+
 

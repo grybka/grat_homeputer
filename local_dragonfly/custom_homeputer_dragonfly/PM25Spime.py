@@ -41,7 +41,7 @@ class PM25Spime(Spime):
             print("checksum failed")
             raise exceptions.DriplineHardwareError('error, checksum failed')
             return []
-        return [particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
+        return [pm10_en,pm25_env,pm100_env,particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
     
 __all__.append('PM25Spime')
 

@@ -3,5 +3,6 @@ module: Spimescape
 broker: 10.0.0.4
 endpoints:
     - name: particle_density
-      module: 
+      module: PM25Spime
+      module_path: /custom_homeputer_dragonfly/PM25Spime.py
 

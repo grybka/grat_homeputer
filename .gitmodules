@@ -4,3 +4,9 @@
 [submodule "dripline-python"]
 	path = dripline-python
 	url = https://github.com/project8/dripline-python.git
+[submodule "local_dragonfly/dripline-python"]
+	path = local_dragonfly/dripline-python
+	url = https://github.com/project8/dripline-python.git
+[submodule "local_dragonfly/dragonfly"]
+	path = local_dragonfly/dragonfly
+	url = https://github.com/project8/dragonfly.git

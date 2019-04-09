@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+  #for passing messages
+  rabbit_broker:
+    image: rabbitmq:3-management-alpine
+    ports: 
+     - 5672:5672
+  #sets up the channels on the exchange I suppose
+  exchange-setup:
+    image: local_dragonfly/ 
+    volumes:
+      - type: bind
+        source: "./local_dragonfly/home_authentications.json"
+        target: "/root/.project8_authentications.json"
+    command: ["dragonfly", "monitor", "-vv", "-b", "rabbit_broker", "-e", "alerts"]
+    deponds_on:
+      - rabbit_broker
+

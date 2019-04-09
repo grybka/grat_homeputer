@@ -1,0 +1,7 @@
+name: pm25_kat
+module: Spimescape
+broker: 10.0.0.4
+endpoints:
+    - name: particle_density
+      module: 
+

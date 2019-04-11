@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM python:3
 
 ADD ./dripline-python /dripline-python
 COPY ./dragonfly /dragonfly

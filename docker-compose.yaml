@@ -7,12 +7,14 @@ services:
      - 5672:5672
   #sets up the channels on the exchange I suppose
   exchange-setup:
-    image: local_dragonfly/ 
+    build: local_dragonfly/ 
     volumes:
       - type: bind
-        source: "./local_dragonfly/home_authentications.json"
+        source: "./local_dragonfly/project8_authentications.json"
         target: "/root/.project8_authentications.json"
-      - ./local_dragonfly/custom_homeputer_dragonfly:/custom_homeputer_dragonfly
+      - type: bind
+        source: "./local_dragonfly/custom_homeputer_dragonfly"
+        target: "/custom_homeputer_dragonfly"
     command: ["dragonfly", "monitor", "-vv", "-b", "rabbit_broker", "-e", "alerts"]
     depends_on:
       - rabbit_broker
@@ -22,8 +24,10 @@ services:
       - type: bind
         source: "./local_dragonfly/home_authentications.json"
         target: "/root/.project8_authentications.json"
-      - /custom_homeputer_dragonfly:./local_dragonfly/custom_homeputer_dragonfly
-    command: ["dragonfly", "serve", "-c", "/custom_homputer_dragonfly/pm25.yaml","-b", "rabbit_broker"]
+      - type: bind
+        source: "./local_dragonfly/custom_homeputer_dragonfly"
+        target: "/custom_homeputer_dragonfly"
+    command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker"]
     depends_on:
       - rabbit_broker
 

@@ -22,7 +22,7 @@ services:
     build: local_dragonfly/ 
     volumes:
       - type: bind
-        source: "./local_dragonfly/home_authentications.json"
+        source: "./local_dragonfly/project8_authentications.json"
         target: "/root/.project8_authentications.json"
       - type: bind
         source: "./local_dragonfly/custom_homeputer_dragonfly"

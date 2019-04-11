@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from dripline.core import Provider, exceptions, fancy_doc
+from dripline.core import Provider, exceptions, fancy_doc, Spime
 import board
 import busio
 from digitalio import DigitalInOut, Direction
@@ -10,12 +10,19 @@ except ImportError:
     import ustruct as struct
 import serial
 
+import logging
+logger = logging.getLogger(__name__)
+
+__all__ = []
+
 class PM25Spime(Spime):
     def __init__(self,**kwargs):
+        print("p25 init called")
         Spime.__init__(self,**kwargs)
 
     def on_get(self):
         #I suppose I'll have it reconnect on every get.  Seems a little excessive
+        return 3
         uart=serial.Serial("/dev/ttyS0",baudrate=9600,timeout=3000)
         data=uart.read(32)
         data=list(data)

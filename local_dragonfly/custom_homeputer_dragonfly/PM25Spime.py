@@ -4,11 +4,11 @@ from dripline.core import Provider, exceptions, fancy_doc, Spime
 import board
 import busio
 from digitalio import DigitalInOut, Direction
+import serial
 try:
     import struct
 except ImportError:
     import ustruct as struct
-import serial
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,33 +22,39 @@ class PM25Spime(Spime):
 
     def on_get(self):
         #I suppose I'll have it reconnect on every get.  Seems a little excessive
-        return 3
         uart=serial.Serial("/dev/ttyS0",baudrate=9600,timeout=3000)
-        data=uart.read(32)
-        data=list(data)
-        buffer=data
-        if len(buffer)<32:
-            print("error, didnt get 32 bytes of data, got {}".format(len(buffer)))
-            raise exceptions.DriplineHardwareError('error, didnt get 32 bytes of data')
+        for cycle in range(100):
+            buffer = []
+            data=uart.read(32)
+            data=list(data)
+            buffer+=data
+            while buffer and buffer[0] != 0x42:
+                buffer.pop(0)
+            if len(buffer) > 200:
+                buffer = []  # avoid an overrun if all bad data
+            if len(buffer) < 32:
+                continue
+            if buffer[1] != 0x4d:
+                buffer.pop(0)
+                continue
+            #raise exceptions.DriplineHardwareError('error, didnt get 32 bytes of data')
             return []
-        while buffer and buffer[0] != 0x4d:
-            buffer.pop(0)
-        frame_len=struct.unpack(">H",bytes(buffer[2:4]))[0]
-        if frame_len != 28:
-            print("error, frame length not right")
-            raise exceptions.DriplineHardwareError('error, frame length not right')
-            return []
-        frame = struct.unpack(">HHHHHHHHHHHHHH", bytes(buffer[4:]))
-        pm10_standard, pm25_standard, pm100_standard, pm10_env, \
-            pm25_env, pm100_env, particles_03um, particles_05um, particles_10um, \
-            particles_25um, particles_50um, particles_100um, skip, checksum = frame
+            frame_len=struct.unpack(">H",bytes(buffer[2:4]))[0]
+            if frame_len != 28:
+                buffer =[]
+                continue
+            frame = struct.unpack(">HHHHHHHHHHHHHH", bytes(buffer[4:]))
+            pm10_standard, pm25_standard, pm100_standard, pm10_env, \
+                pm25_env, pm100_env, particles_03um, particles_05um, particles_10um, \
+                particles_25um, particles_50um, particles_100um, skip, checksum = frame
 
-        check = sum(buffer[0:30])
-        if check != checksum:
-            print("checksum failed")
-            raise exceptions.DriplineHardwareError('error, checksum failed')
-            return []
-        return [pm10_en,pm25_env,pm100_env,particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
+            check = sum(buffer[0:30])
+            if check != checksum:
+                print("checksum failed")
+                raise exceptions.DriplineHardwareError('error, checksum failed')
+                return []
+            return [pm10_en,pm25_env,pm100_env,particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
+        raise exceptions.DriplineHardwareError('communication to pm25 sensor failed somehow')
     
 __all__.append('PM25Spime')
 

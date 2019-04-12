@@ -27,7 +27,9 @@ services:
       - type: bind
         source: "./local_dragonfly/custom_homeputer_dragonfly"
         target: "/custom_homeputer_dragonfly"
-    command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker"]
+    devices:
+      - "/dev/ttyS0:/dev/ttyS0"
+    command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker","-vv"]
     depends_on:
       - rabbit_broker
 

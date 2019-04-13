@@ -1,0 +1,13 @@
+version: '3'
+services:
+    homeassistant:
+      container_name: home-assistant
+      image: homeassistant/raspberrypi3-homeassistant
+      volumes:
+        - ./config:/config
+        - /etc/localtime:/etc/localtime:ro
+      devices:
+        - "/dev/ttyACM0:/dev/ttyACM0"
+      restart: "no"
+      network_mode: host
+

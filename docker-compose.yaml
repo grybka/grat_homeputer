@@ -32,5 +32,3 @@ services:
     command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker","-vv"]
     depends_on:
       - rabbit_broker
-
-

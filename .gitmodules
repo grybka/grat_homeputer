@@ -10,3 +10,6 @@
 [submodule "local_dragonfly/dragonfly"]
 	path = local_dragonfly/dragonfly
 	url = https://github.com/project8/dragonfly.git
+[submodule "homeassistant/homeassistant_with_dripline/dripline-python"]
+	path = homeassistant/homeassistant_with_dripline/dripline-python
+	url = https://github.com/project8/dripline-python.git

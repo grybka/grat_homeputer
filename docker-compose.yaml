@@ -29,6 +29,7 @@ services:
         target: "/custom_homeputer_dragonfly"
     devices:
       - "/dev/ttyS0:/dev/ttyS0"
-    command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker","-vv"]
-    depends_on:
-      - rabbit_broker
+    #command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "rabbit_broker","-vv"]
+    command: ["dragonfly", "serve", "-c", "/custom_homeputer_dragonfly/pm25.yaml","-b", "10.0.0.3","-vv"]
+    #depends_on:
+    #  - rabbit_broker

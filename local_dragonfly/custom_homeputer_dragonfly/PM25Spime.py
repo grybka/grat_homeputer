@@ -57,7 +57,8 @@ class PM25Spime(Spime):
                 print("checksum failed")
                 raise exceptions.DriplineHardwareError('error, checksum failed')
                 return []
-            return [pm10_env,pm25_env,pm100_env,particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
+            return {"pm2_5": pm25_env,"pm_10":pm10_env,"pm_100":pm100_env}
+            #return [pm10_env,pm25_env,pm100_env,particles_03um,particles_05um,particles_10um,particles_25um,particles_50um,particles_100um]
         raise exceptions.DriplineHardwareError('communication to pm25 sensor failed somehow')
     
 __all__.append('PM25Spime')

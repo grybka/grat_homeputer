@@ -1,8 +1,9 @@
 version: '3'
 services:
-    homeassistant:
+    home-assistant:
       container_name: home-assistant
-      image: homeassistant/raspberrypi3-homeassistant
+      #      image: homeassistant/raspberrypi3-homeassistant
+      build: homeassistant_with_dripline
       volumes:
         - ./config:/config
         - /etc/localtime:/etc/localtime:ro

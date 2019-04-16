@@ -6,6 +6,9 @@ services:
           - ./flask_app:/app
         ports:
           - 5000:5000
+        devices:
+            - "/dev/ttyS0:/dev/ttyS0"
+
         working_dir: /app
         command: ["uwsgi","--ini","app.ini"]
 #        command: ['uwsgi', '--socket', 'localhost:5000','--wsgi-file','app.py', '--callable', 'app']

@@ -1,0 +1,12 @@
+version: '3'
+services:
+    pm25-app:
+        build: flask_app
+        volumes:
+          - ./flask_app:/app
+        ports:
+          - 5000:5000
+        working_dir: /app
+        command: ["uwsgi","--ini","app.ini"]
+#        command: ['uwsgi', '--socket', 'localhost:5000','--wsgi-file','app.py', '--callable', 'app']
+#        command: ['python','app.py']

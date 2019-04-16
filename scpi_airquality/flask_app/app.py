@@ -3,6 +3,7 @@
 from flask import Flask
 import yaml
 import serial
+import struct
 app = Flask(__name__)
 
 @app.route('/pm25')
@@ -55,7 +56,7 @@ def hello_world():
             continue
         response_object["pm2.5"]=pm25_env
         response_object["pm10"]=pm10_env
-        response_object["pm100"]=pm100.env
+        response_object["pm100"]=pm100_env
         uart.close()
         return yaml.dump(response_object,Dumper=yaml.Dumper)
     uart.close()

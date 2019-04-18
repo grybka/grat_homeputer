@@ -1,15 +1,1 @@
-[submodule "dragonfly"]
-	path = dragonfly
-	url = https://github.com/project8/dragonfly.git
-[submodule "dripline-python"]
-	path = dripline-python
-	url = https://github.com/project8/dripline-python.git
-[submodule "local_dragonfly/dripline-python"]
-	path = depricated/local_dragonfly/dripline-python
-	url = https://github.com/project8/dripline-python.git
-[submodule "local_dragonfly/dragonfly"]
-	path = depricated/local_dragonfly/dragonfly
-	url = https://github.com/project8/dragonfly.git
-[submodule "homeassistant/homeassistant_with_dripline/dripline-python"]
-	path = depricated/homeassistant/homeassistant_with_dripline/dripline-python
-	url = https://github.com/project8/dripline-python.git
+

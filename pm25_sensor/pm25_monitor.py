@@ -3,8 +3,11 @@ import struct
 import time
 from requests import post
 
+access_token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2YTI4ZjRhY2Q1NzU0MTk5OWE4NWNhOGUwYmQ2MDEzNSIsImlhdCI6MTU1NTU2MzI4NiwiZXhwIjoxODcwOTIzMjg2fQ.Gka5nS1JoVllh0s8lQYKTqmCAWIH41evMm6Th4RbuRg'
+
 def read_pm25():
     response_object={"error": []}
+    buffer=[]
     try:
         uart=serial.Serial("/dev/ttyS0",baudrate=9600,timeout=3)
     except serial.SerialException as err:
@@ -35,8 +38,8 @@ def read_pm25():
         if frame_len != 28:
             buffer = []
             continue
-
-        frame = struct.unpack(">HHHHHHHHHHHHHH", bytes(buffer[4:]))
+        print("buffer length {}".format(len(buffer)))
+        frame = struct.unpack(">HHHHHHHHHHHHHH", bytes(buffer[4:32]))
 
         pm10_standard, pm25_standard, pm100_standard, pm10_env, \
             pm25_env, pm100_env, particles_03um, particles_05um, particles_10um, \
@@ -56,25 +59,28 @@ def read_pm25():
     response_object["error"].append("out of retries")
     return response_object
 
-def update_sensor(host,sensorname,value):
+def update_sensor(host,sensorname,value,units):
     url=host+"/api/states/sensor."+sensorname
-    headers={'Authorization': 'Bearer ADBD', 'Content-Type': 'application/json'}
-    payload={"state": str(value)}
-    resquests.post(url,data=payload,headers=headers)
-#c.setopt(pycurl.URL,url)
-#    c.setopt(pycurl.POSTFIELDS,postfields)
-#    c.setopt(pycurl.HTTPHEADER,["Authorization: Bearer ADBD","Content-Type: application/json"] )
-#    c=pycurl.Curl()
-#    c.perform()
-#    c.close()
+    headers={'Authorization': 'Bearer '+access_token, 'Content-Type': 'application/json'}
+    payload={"state": str(value),"attributes": {"unit_of_measurement": units}}
+    try:
+        r=post(url,json=payload,headers=headers)
+        print("request response was {}".format(r.text))
+    except Exception as x:
+        print("failed to post with error {}".format(x))
 
 #initialization
-while True:
-    #attempt to read sensor
-    data=read_pm25()
-    if len(data["error"])!=0:
-        continue
-    #send if data is good
-    update_sensor("10.0.0.3:8123","kitchen_pm25",data["pm2.5"])
-    #wait appropriate amount of time
-    time.sleep(30)
+try:
+    while True:
+        #attempt to read sensor
+        data=read_pm25()
+        if len(data["error"])!=0:
+            continue
+        #send if data is good
+        update_sensor("http://10.0.0.3:8123","kitchen_pm25",data["pm2.5"],"ug/m3")
+        update_sensor("http://10.0.0.3:8123","kitchen_pm10",data["pm10"],"ug/m3")
+        #wait appropriate amount of time
+        time.sleep(30)
+except KeyboardInterrupt:
+    print("quitting")
+    pass

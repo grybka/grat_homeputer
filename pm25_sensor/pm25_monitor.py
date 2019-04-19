@@ -1,6 +1,7 @@
 import serial
 import struct
 import time
+import yaml
 from requests import post
 
 access_token=""
@@ -71,7 +72,7 @@ def update_sensor(host,sensorname,value,units):
 
 #initialization
 authfile=open("./grat_auth.yaml")
-authyaml=yaml.load(authfile,Loader=Loader)
+authyaml=yaml.load(authfile,Loader=yaml.Loader)
 authfile.close()
 access_token=authyaml["ha_access_token"]
 
@@ -82,7 +83,7 @@ try:
         if len(data["error"])!=0:
             continue
         #send if data is good
-        update_sensor("http://10.0.0.3:8123","kitchen_pm2.5",data["pm2.5"],"ug/m3")
+        update_sensor("http://10.0.0.3:8123","kitchen_pm2_5",data["pm2.5"],"ug/m3")
         update_sensor("http://10.0.0.3:8123","kitchen_pm10",data["pm10"],"ug/m3")
         update_sensor("http://10.0.0.3:8123","kitchen_pm100",data["pm100"],"ug/m3")
         #wait appropriate amount of time

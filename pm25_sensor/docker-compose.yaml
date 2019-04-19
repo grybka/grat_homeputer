@@ -4,6 +4,8 @@ services:
     build: .
     volumes:
       - .:/app
+    devices:
+      - /dev/ttyS0:/dev/ttyS0
     container_name: pm25_monitor
     working_dir: /app
     command: ['python','pm25_monitor.py']

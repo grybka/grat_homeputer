@@ -3,7 +3,7 @@ import struct
 import time
 from requests import post
 
-access_token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2YTI4ZjRhY2Q1NzU0MTk5OWE4NWNhOGUwYmQ2MDEzNSIsImlhdCI6MTU1NTU2MzI4NiwiZXhwIjoxODcwOTIzMjg2fQ.Gka5nS1JoVllh0s8lQYKTqmCAWIH41evMm6Th4RbuRg'
+access_token=""
 
 def read_pm25():
     response_object={"error": []}
@@ -70,6 +70,11 @@ def update_sensor(host,sensorname,value,units):
         print("failed to post with error {}".format(x))
 
 #initialization
+authfile=open("./grat_auth.yaml")
+authyaml=yaml.load(authfile,Loader=Loader)
+authfile.close()
+access_token=authyaml["ha_access_token"]
+
 try:
     while True:
         #attempt to read sensor
@@ -77,8 +82,9 @@ try:
         if len(data["error"])!=0:
             continue
         #send if data is good
-        update_sensor("http://10.0.0.3:8123","kitchen_pm25",data["pm2.5"],"ug/m3")
+        update_sensor("http://10.0.0.3:8123","kitchen_pm2.5",data["pm2.5"],"ug/m3")
         update_sensor("http://10.0.0.3:8123","kitchen_pm10",data["pm10"],"ug/m3")
+        update_sensor("http://10.0.0.3:8123","kitchen_pm100",data["pm100"],"ug/m3")
         #wait appropriate amount of time
         time.sleep(30)
 except KeyboardInterrupt:

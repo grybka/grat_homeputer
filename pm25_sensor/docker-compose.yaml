@@ -1,0 +1,9 @@
+version: "3"
+services:
+  pm25_monitor:
+    build: .
+    volumes:
+      - .:/app
+    container_name: pm25_monitor
+    working_dir: /app
+    command: ['python','pm25_monitor.py']
